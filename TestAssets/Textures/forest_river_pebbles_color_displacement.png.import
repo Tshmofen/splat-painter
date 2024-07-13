@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://ckgh7enltdfh2"
-path.s3tc="res://.godot/imported/forest_river_pebbles_color_displacement.png-d4e3e6d653d80bec9bbcf8c44cdcc289.s3tc.ctex"
+path.s3tc="res://.godot/imported/forest_river_pebbles_color_displacement.png-3fd9fef740f0ad9d97f66d0b5a4d449a.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://Textures/Procedural/Terrain/forest_river_pebbles_color_displacement.png"
-dest_files=["res://.godot/imported/forest_river_pebbles_color_displacement.png-d4e3e6d653d80bec9bbcf8c44cdcc289.s3tc.ctex"]
+source_file="res://TestAssets/Textures/forest_river_pebbles_color_displacement.png"
+dest_files=["res://.godot/imported/forest_river_pebbles_color_displacement.png-3fd9fef740f0ad9d97f66d0b5a4d449a.s3tc.ctex"]
 
 [params]
 

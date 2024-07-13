@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://4qcymcyf80m8"
-path.s3tc="res://.godot/imported/forest_leafy_grass_normal_roughness.png-23fa2785dad326b3f357b9a9f9fd9d04.s3tc.ctex"
+path.s3tc="res://.godot/imported/forest_leafy_grass_normal_roughness.png-f8ddddf03386bcc062381d950ec82311.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://Textures/Procedural/Terrain/forest_leafy_grass_normal_roughness.png"
-dest_files=["res://.godot/imported/forest_leafy_grass_normal_roughness.png-23fa2785dad326b3f357b9a9f9fd9d04.s3tc.ctex"]
+source_file="res://TestAssets/Textures/forest_leafy_grass_normal_roughness.png"
+dest_files=["res://.godot/imported/forest_leafy_grass_normal_roughness.png-f8ddddf03386bcc062381d950ec82311.s3tc.ctex"]
 
 [params]
 

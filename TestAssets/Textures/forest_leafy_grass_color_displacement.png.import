@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bhj0givev572c"
-path.s3tc="res://.godot/imported/forest_leafy_grass_color_displacement.png-6e3ba941bf3370c64fb989f3c97f6026.s3tc.ctex"
+path.s3tc="res://.godot/imported/forest_leafy_grass_color_displacement.png-616fbdca8994a82666eeb58d3e909612.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://Textures/Procedural/Terrain/forest_leafy_grass_color_displacement.png"
-dest_files=["res://.godot/imported/forest_leafy_grass_color_displacement.png-6e3ba941bf3370c64fb989f3c97f6026.s3tc.ctex"]
+source_file="res://TestAssets/Textures/forest_leafy_grass_color_displacement.png"
+dest_files=["res://.godot/imported/forest_leafy_grass_color_displacement.png-616fbdca8994a82666eeb58d3e909612.s3tc.ctex"]
 
 [params]
 

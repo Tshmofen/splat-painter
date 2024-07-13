@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dh0k6hax75053"
-path.s3tc="res://.godot/imported/forest_river_pebbles_normal_roughness.png-a46ac606d434f06f03a8eaba894a5619.s3tc.ctex"
+path.s3tc="res://.godot/imported/forest_river_pebbles_normal_roughness.png-01f1938f780846675e8e4fa1a59923ec.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://Textures/Procedural/Terrain/forest_river_pebbles_normal_roughness.png"
-dest_files=["res://.godot/imported/forest_river_pebbles_normal_roughness.png-a46ac606d434f06f03a8eaba894a5619.s3tc.ctex"]
+source_file="res://TestAssets/Textures/forest_river_pebbles_normal_roughness.png"
+dest_files=["res://.godot/imported/forest_river_pebbles_normal_roughness.png-01f1938f780846675e8e4fa1a59923ec.s3tc.ctex"]
 
 [params]
 
@@ -20,12 +20,12 @@ compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/hdr_compression=1
-compress/normal_map=0
+compress/normal_map=1
 compress/channel_pack=0
 mipmaps/generate=true
 mipmaps/limit=-1
-roughness/mode=0
-roughness/src_normal=""
+roughness/mode=1
+roughness/src_normal="res://TestAssets/Textures/forest_river_pebbles_normal_roughness.png"
 process/fix_alpha_border=true
 process/premult_alpha=false
 process/normal_map_invert_y=false

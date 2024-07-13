@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bgv6654a3xg3"
-path.s3tc="res://.godot/imported/forest_cliff_dirt_normal_roughness.png-fd92f3d9465f446b28066075774a96bf.s3tc.ctex"
+path.s3tc="res://.godot/imported/forest_cliff_dirt_normal_roughness.png-e5c4896c005deb3c3e86463fa330eb9f.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://Textures/Procedural/Terrain/forest_cliff_dirt_normal_roughness.png"
-dest_files=["res://.godot/imported/forest_cliff_dirt_normal_roughness.png-fd92f3d9465f446b28066075774a96bf.s3tc.ctex"]
+source_file="res://TestAssets/Textures/forest_cliff_dirt_normal_roughness.png"
+dest_files=["res://.godot/imported/forest_cliff_dirt_normal_roughness.png-e5c4896c005deb3c3e86463fa330eb9f.s3tc.ctex"]
 
 [params]
 
