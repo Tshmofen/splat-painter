@@ -5,6 +5,7 @@
     <RootNamespace>GroundPainter</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="addons\waterways_net\Util\" />
+    <Compile Remove="addons\waterways_net\**" />
+    <EmbeddedResource Remove="addons\waterways_net\**" />
   </ItemGroup>
 </Project>

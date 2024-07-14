@@ -8,14 +8,14 @@ using GroundPainter.UI;
 namespace GroundPainter;
 
 [Tool]
-public partial class WaterwaysPlugin : EditorPlugin
+public partial class SplatPaintPlugin : EditorPlugin
 {
     public const string PluginPath = "res://addons/waterways_net";
     public const string PaintControlNodePath = "/UI/paint_control.tscn";
 
     public EditorSelection Selection { get; private set; }
     public PaintControl PaintControl { get; private set; }
-    public MeshPaint MeshPaint { get; private set; }
+    public SplatPaint SplatPaint { get; private set; }
 
     #region Util
 
@@ -23,20 +23,20 @@ public partial class WaterwaysPlugin : EditorPlugin
     {
         var selectedNode = Selection.GetSelectedNodes().FirstOrDefault();
 
-        if (selectedNode is not MeshPaint meshPaint)
+        if (selectedNode is not SplatPaint meshPaint)
         {
-            MeshPaint = null;
+            SplatPaint = null;
             SwitchRiverControl(false);
             return;
         }
 
-        MeshPaint = meshPaint;
+        SplatPaint = meshPaint;
         SwitchRiverControl(true);
     }
 
     private void OnMenuActionPressed(PaintMenuActionType action)
     {
-        if (MeshPaint == null)
+        if (SplatPaint == null)
         {
             return;
         }
@@ -89,7 +89,7 @@ public partial class WaterwaysPlugin : EditorPlugin
 
     public override bool _Handles(GodotObject @object)
     {
-        return @object is MeshPaint;
+        return @object is SplatPaint;
     }
 
     public override int _Forward3DGuiInput(Camera3D camera, InputEvent @event)

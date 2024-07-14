@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dl2fd2kpkqfcs"
-path="res://.godot/imported/select.svg-a4c4cc46aa6133779a2e378758cf019c.ctex"
+uid="uid://cot00dv010gt2"
+path="res://.godot/imported/delete.svg-5fd6ed70f200d4fa2f2b7bfc1a6461f7.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/waterways_net/Icons/select.svg"
-dest_files=["res://.godot/imported/select.svg-a4c4cc46aa6133779a2e378758cf019c.ctex"]
+source_file="res://addons/splat_paint/Icons/delete.svg"
+dest_files=["res://.godot/imported/delete.svg-5fd6ed70f200d4fa2f2b7bfc1a6461f7.ctex"]
 
 [params]
 
