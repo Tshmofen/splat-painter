@@ -2,11 +2,10 @@
 
 using Godot;
 using System.Linq;
-using GroundPainter;
+using GroundPainter.Data.UI;
 using GroundPainter.UI;
-using Waterways.Data.UI;
 
-namespace Waterways;
+namespace GroundPainter;
 
 [Tool]
 public partial class WaterwaysPlugin : EditorPlugin
@@ -35,37 +34,12 @@ public partial class WaterwaysPlugin : EditorPlugin
         SwitchRiverControl(true);
     }
 
-    private void OnMenuActionPressed(RiverMenuActionType action)
+    private void OnMenuActionPressed(PaintMenuActionType action)
     {
         if (MeshPaint == null)
         {
             return;
         }
-
-        //switch (action)
-        //{
-        //    case RiverMenuActionType.GenerateMeshSibling:
-        //        if (RiverManager.Owner != null)
-        //        {
-        //            var meshCopy = RiverManager.GetMeshCopy();
-        //            RiverManager.GetParent().AddChild(meshCopy);
-        //            meshCopy.Owner = RiverManager.GetTree().EditedSceneRoot;
-        //        }
-        //        else
-        //        {
-        //            GD.PushWarning("Cannot create MeshInstance3D sibling when River is root.");
-        //        }
-
-        //        break;
-
-        //    case RiverMenuActionType.RecenterRiver:
-        //        RiverManager.RecenterCurve();
-        //        var undoRedo = GetUndoRedo();
-        //        var riverId = undoRedo.GetObjectHistoryId(RiverManager);
-        //        undoRedo.GetHistoryUndoRedo(riverId).ClearHistory();
-        //        GD.PushWarning("RiverManager UndoRedo history was cleared.");
-        //        break;
-        //}
     }
 
     private void AddCustomType(string type, string @base, string scriptPath, string iconPath)

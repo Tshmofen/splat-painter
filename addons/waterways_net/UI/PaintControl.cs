@@ -1,17 +1,17 @@
 ﻿using Godot;
-using Waterways.Data.UI;
+using GroundPainter.Data.UI;
 
 namespace GroundPainter.UI;
 
 [Tool]
 public partial class PaintControl : HBoxContainer
 {
-    [Signal] public delegate void MenuActionEventHandler(RiverMenuActionType action);
+    [Signal] public delegate void MenuActionEventHandler(PaintMenuActionType action);
 
-    [Export] private OptionButton ConstraintButton { get; set; }
-    [Export] private BaseButton SelectButton { get; set; }
-    [Export] private BaseButton RemoveButton { get; set; }
-    [Export] private BaseButton AddButton { get; set; }
+    [Export] private BaseButton PaintR { get; set; }
+    [Export] private BaseButton PaintG { get; set; }
+    [Export] private BaseButton PaintB { get; set; }
+    [Export] private BaseButton PaintA { get; set; }
 
 
     public override void _Ready()
