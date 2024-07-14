@@ -1,12 +1,12 @@
 ﻿using Godot;
-using GroundPainter.Data;
+using Waterways.Data.UI;
 
 namespace GroundPainter.UI;
 
 [Tool]
 public partial class PaintControl : HBoxContainer
 {
-    [Signal] public delegate void MenuActionEventHandler(PaintMenuActionType action);
+    [Signal] public delegate void MenuActionEventHandler(RiverMenuActionType action);
 
     [Export] private OptionButton ConstraintButton { get; set; }
     [Export] private BaseButton SelectButton { get; set; }

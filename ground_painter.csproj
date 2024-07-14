@@ -4,4 +4,7 @@
     <EnableDynamicLoading>true</EnableDynamicLoading>
     <RootNamespace>GroundPainter</RootNamespace>
   </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="addons\waterways_net\Util\" />
+  </ItemGroup>
 </Project>

@@ -26,4 +26,4 @@ project/assembly_name="ground_painter"
 
 [editor_plugins]
 
-enabled=PackedStringArray()
+enabled=PackedStringArray("res://addons/waterways_net/plugin.cfg")
