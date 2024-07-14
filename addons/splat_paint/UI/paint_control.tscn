@@ -1,8 +1,17 @@
-[gd_scene format=3 uid="uid://byf1163tiqujb"]
+[gd_scene load_steps=2 format=3 uid="uid://byf1163tiqujb"]
 
-[node name="RiverControl" type="HBoxContainer"]
+[ext_resource type="Script" path="res://addons/splat_paint/UI/PaintControl.cs" id="1_kgti1"]
+
+[node name="RiverControl" type="HBoxContainer" node_paths=PackedStringArray("PaintR", "PaintG", "PaintB", "PaintA", "PaintForceSlider", "PaintSizeSlider")]
 offset_right = 128.0
 offset_bottom = 26.0
+script = ExtResource("1_kgti1")
+PaintR = NodePath("PaintR")
+PaintG = NodePath("PaintG")
+PaintB = NodePath("PaintB")
+PaintA = NodePath("PaintA")
+PaintForceSlider = NodePath("PaintForce")
+PaintSizeSlider = NodePath("PaintSize")
 
 [node name="PaintR" type="Button" parent="."]
 layout_mode = 2

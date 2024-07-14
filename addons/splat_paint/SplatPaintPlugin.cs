@@ -2,7 +2,6 @@
 
 using Godot;
 using System.Linq;
-using GroundPainter.Data.UI;
 using GroundPainter.UI;
 
 namespace GroundPainter;
@@ -10,7 +9,7 @@ namespace GroundPainter;
 [Tool]
 public partial class SplatPaintPlugin : EditorPlugin
 {
-    public const string PluginPath = "res://addons/waterways_net";
+    public const string PluginPath = "res://addons/splat_paint";
     public const string PaintControlNodePath = "/UI/paint_control.tscn";
 
     public EditorSelection Selection { get; private set; }
@@ -26,30 +25,22 @@ public partial class SplatPaintPlugin : EditorPlugin
         if (selectedNode is not SplatPaint meshPaint)
         {
             SplatPaint = null;
-            SwitchRiverControl(false);
+            SwitchPaintControl(false);
             return;
         }
 
         SplatPaint = meshPaint;
-        SwitchRiverControl(true);
+        SwitchPaintControl(true);
     }
 
-    private void OnMenuActionPressed(PaintMenuActionType action)
-    {
-        if (SplatPaint == null)
-        {
-            return;
-        }
-    }
-
-    private void AddCustomType(string type, string @base, string scriptPath, string iconPath)
+    private void AddCustomType(string type, string @base, string scriptPath, string iconPath = null)
     {
         var script = ResourceLoader.Load<Script>($"{PluginPath}/{scriptPath}");
-        var icon = ResourceLoader.Load<Texture2D>($"{PluginPath}/Icons/{iconPath}");
+        var icon = iconPath != null ? ResourceLoader.Load<Texture2D>($"{PluginPath}/Icons/{iconPath}") : null;
         AddCustomType(type, @base, script, icon);
     }
 
-    private void SwitchRiverControl(bool show)
+    private void SwitchPaintControl(bool show)
     {
         if (show && !PaintControl.IsInsideTree())
         {
@@ -65,26 +56,20 @@ public partial class SplatPaintPlugin : EditorPlugin
 
     public override void _EnterTree()
     {
-        //RiverControl = ResourceLoader.Load<PackedScene>(PluginPath + RiverControlNodePath).Instantiate<RiverControl>();
-        //RiverControl.MenuAction += OnMenuActionPressed;
-        //RiverGizmo = new RiverGizmo { EditorPlugin = this };
+        PaintControl = ResourceLoader.Load<PackedScene>(PluginPath + PaintControlNodePath).Instantiate<PaintControl>();
 
-        //Selection = EditorInterface.Singleton.GetSelection();
-        //Selection.SelectionChanged += OnSelectionChange;
-        //OnSelectionChange();
+        Selection = EditorInterface.Singleton.GetSelection();
+        Selection.SelectionChanged += OnSelectionChange;
+        OnSelectionChange();
 
-        //AddNode3DGizmoPlugin(RiverGizmo);
-        //AddCustomType(RiverManager.PluginNodeAlias, RiverManager.PluginBaseAlias, RiverManager.ScriptPath, RiverManager.IconPath);
-        //AddCustomType(RiverFloatSystem.PluginNodeAlias, RiverFloatSystem.PluginBaseAlias, RiverFloatSystem.ScriptPath, RiverFloatSystem.IconPath);
+        AddCustomType(SplatPaint.PluginNodeAlias, SplatPaint.PluginBaseAlias, SplatPaint.ScriptPath);
     }
 
     public override void _ExitTree()
     {
-        //RemoveCustomType(RiverFloatSystem.PluginNodeAlias);
-        //RemoveCustomType(RiverManager.PluginNodeAlias);
-        //RemoveNode3DGizmoPlugin(RiverGizmo);
-        //SwitchRiverControl(false);
-        //Selection.SelectionChanged -= OnSelectionChange;
+        RemoveCustomType(SplatPaint.PluginNodeAlias);
+        SwitchPaintControl(false);
+        Selection.SelectionChanged -= OnSelectionChange;
     }
 
     public override bool _Handles(GodotObject @object)
@@ -144,7 +129,7 @@ public partial class SplatPaintPlugin : EditorPlugin
         //    }
         //}
 
-        return 1;
+        return 0;
     }
 }
 

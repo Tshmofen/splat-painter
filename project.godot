@@ -26,4 +26,4 @@ project/assembly_name="ground_painter"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/mesh_paint/plugin.cfg", "res://addons/splat_paint/plugin.cfg", "res://addons/waterways_net/plugin.cfg")
+enabled=PackedStringArray("res://addons/splat_paint/plugin.cfg")

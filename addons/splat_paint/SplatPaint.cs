@@ -2,6 +2,7 @@
 
 namespace GroundPainter;
 
+[Tool]
 public partial class SplatPaint : MeshInstance3D
 {
     public const string PluginNodeAlias = nameof(SplatPaint);
