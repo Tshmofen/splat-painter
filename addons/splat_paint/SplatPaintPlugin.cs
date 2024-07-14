@@ -10,7 +10,6 @@ namespace GroundPainter;
 public partial class SplatPaintPlugin : EditorPlugin
 {
     public const string PluginPath = "res://addons/splat_paint";
-    public const string PaintControlNodePath = "/UI/paint_control.tscn";
 
     public EditorSelection Selection { get; private set; }
     public PaintControl PaintControl { get; private set; }
@@ -22,15 +21,21 @@ public partial class SplatPaintPlugin : EditorPlugin
     {
         var selectedNode = Selection.GetSelectedNodes().FirstOrDefault();
 
-        if (selectedNode is not SplatPaint meshPaint)
+        if (selectedNode != SplatPaint)
+        {
+            SplatPaint?.SwitchSelector(false);
+        }
+
+        if (selectedNode is not SplatPaint newSplatPaint)
         {
             SplatPaint = null;
             SwitchPaintControl(false);
             return;
         }
 
-        SplatPaint = meshPaint;
+        SplatPaint = newSplatPaint;
         SwitchPaintControl(true);
+        SplatPaint.InitSelectorCollision();
     }
 
     private void AddCustomType(string type, string @base, string scriptPath, string iconPath = null)
@@ -52,11 +57,33 @@ public partial class SplatPaintPlugin : EditorPlugin
         }
     }
 
+    private static (Vector3 point, Vector3 normal)? GetCameraCollision(Camera3D camera, Vector2 cameraPoint, World3D world)
+    {
+        var rayFrom = camera.ProjectRayOrigin(cameraPoint);
+        var rayDir = camera.ProjectRayNormal(cameraPoint);
+        var rayParams = new PhysicsRayQueryParameters3D
+        {
+            From = rayFrom,
+            To = rayFrom + (rayDir * 4096)
+        };
+
+        var result = world.DirectSpaceState.IntersectRay(rayParams);
+        if (result == null || result.Count == 0)
+        {
+            return null;
+        }
+
+        var collisionPoint = result["position"].AsVector3();
+        var collisionNormal = result["normal"].AsVector3();
+        return (collisionPoint, collisionNormal);
+
+    }
+
     #endregion
 
     public override void _EnterTree()
     {
-        PaintControl = ResourceLoader.Load<PackedScene>(PluginPath + PaintControlNodePath).Instantiate<PaintControl>();
+        PaintControl = ResourceLoader.Load<PackedScene>(PluginPath + PaintControl.PluginNodePath).Instantiate<PaintControl>();
 
         Selection = EditorInterface.Singleton.GetSelection();
         Selection.SelectionChanged += OnSelectionChange;
@@ -79,57 +106,37 @@ public partial class SplatPaintPlugin : EditorPlugin
 
     public override int _Forward3DGuiInput(Camera3D camera, InputEvent @event)
     {
-        //if (RiverManager is null)
-        //{
-        //    return 0;
-        //}
+        if (SplatPaint is null || PaintControl.PaintMask == Vector4.Zero)
+        {
+            return 0;
+        }
 
-        //if (@event is not InputEventMouseButton { ButtonIndex: MouseButton.Left } mouseEvent)
-        //{
-        //    return RiverControl.SpatialGuiInput(@event) ? 1 : 0;
-        //}
+        if (@event is not InputEventMouse mouseEvent)
+        {
+            return 0;
+        }
 
-        //var cameraPoint = mouseEvent.Position;
-        //var (segment, point) = RiverCurveHelper.GetClosestPosition(RiverManager, camera, cameraPoint);
+        var cameraPoint = mouseEvent.Position;
+        var toPaint = Input.IsMouseButtonPressed(MouseButton.Left);
+        var collision = GetCameraCollision(camera, cameraPoint, SplatPaint.GetWorld3D());
 
-        //switch (RiverControl.CurrentEditMode)
-        //{
-        //    case RiverEditMode.Select:
-        //    {
-        //        return 0;
-        //    }
+        if (collision == null)
+        {
+            SplatPaint.SwitchSelector(false);
+            return 0;
+        }
 
-        //    case RiverEditMode.Add when !mouseEvent.Pressed:
-        //    {
-        //        var newPoint = point;
+        var (collisionPoint, collisionNormal) = collision.Value;
+        SplatPaint.SwitchSelector(true);
+        SplatPaint.UpdateSelector(collisionPoint, PaintControl.PaintSize);
 
-        //        if (segment == -1)
-        //        {
-        //            newPoint = RiverCurveHelper.GetNewPoint(RiverManager, camera, cameraPoint, RiverControl.CurrentConstraint, RiverControl.IsLocalEditing);
-        //        }
+        if (!toPaint)
+        {
+            return 0;
+        }
 
-        //        if (newPoint == null)
-        //        {
-        //            return 0;
-        //        }
-
-        //        CommitPointAdd(newPoint.Value, segment, RiverCurveHelper.IsStartPointCloser(RiverManager, newPoint.Value));
-        //        break;
-        //    }
-
-        //    case RiverEditMode.Remove when !mouseEvent.Pressed:
-        //    {
-        //        if (segment != -1 && point != null)
-        //        {
-        //            var closestIndex = RiverCurveHelper.GetClosestPointTo(RiverManager, point.Value);
-        //            CommitPointRemove(closestIndex);
-        //        }
-
-        //        break;
-        //    }
-        //}
-
-        return 0;
+        SplatPaint.SelectorPaint(collisionPoint, collisionNormal, PaintControl.PaintMask, PaintControl.PaintForce);
+        return 1; // break other controls when painting
     }
 }
 

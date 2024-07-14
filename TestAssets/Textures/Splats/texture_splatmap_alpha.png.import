@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c68y27ha5m6yp"
-path.s3tc="res://.godot/imported/beach_sand_color_displacement.png-264fb893ec590e5ed347bb04dc4d6284.s3tc.ctex"
+uid="uid://obu7qeb8tugq"
+path.s3tc="res://.godot/imported/texture_splatmap_alpha.png-5c9d3859f4730de08958f8dc62d6d6e4.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://TestAssets/Textures/beach_sand_color_displacement.png"
-dest_files=["res://.godot/imported/beach_sand_color_displacement.png-264fb893ec590e5ed347bb04dc4d6284.s3tc.ctex"]
+source_file="res://TestAssets/Textures/Splats/texture_splatmap_alpha.png"
+dest_files=["res://.godot/imported/texture_splatmap_alpha.png-5c9d3859f4730de08958f8dc62d6d6e4.s3tc.ctex"]
 
 [params]
 

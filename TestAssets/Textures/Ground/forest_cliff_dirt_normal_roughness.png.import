@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bhj0givev572c"
-path.s3tc="res://.godot/imported/forest_leafy_grass_color_displacement.png-616fbdca8994a82666eeb58d3e909612.s3tc.ctex"
+uid="uid://bgv6654a3xg3"
+path.s3tc="res://.godot/imported/forest_cliff_dirt_normal_roughness.png-004d452cbaa46dc68d93d739f5c31379.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://TestAssets/Textures/forest_leafy_grass_color_displacement.png"
-dest_files=["res://.godot/imported/forest_leafy_grass_color_displacement.png-616fbdca8994a82666eeb58d3e909612.s3tc.ctex"]
+source_file="res://TestAssets/Textures/Ground/forest_cliff_dirt_normal_roughness.png"
+dest_files=["res://.godot/imported/forest_cliff_dirt_normal_roughness.png-004d452cbaa46dc68d93d739f5c31379.s3tc.ctex"]
 
 [params]
 
@@ -20,7 +20,7 @@ compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/hdr_compression=1
-compress/normal_map=0
+compress/normal_map=1
 compress/channel_pack=0
 mipmaps/generate=true
 mipmaps/limit=-1
