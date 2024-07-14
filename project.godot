@@ -23,3 +23,7 @@ gdscript/warnings/native_method_override=1
 [dotnet]
 
 project/assembly_name="ground_painter"
+
+[editor_plugins]
+
+enabled=PackedStringArray()

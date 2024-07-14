@@ -1,0 +1,54 @@
+[gd_scene format=3 uid="uid://byf1163tiqujb"]
+
+[node name="RiverControl" type="HBoxContainer"]
+offset_right = 128.0
+offset_bottom = 26.0
+
+[node name="PaintR" type="Button" parent="."]
+layout_mode = 2
+toggle_mode = true
+button_pressed = true
+text = "R"
+flat = true
+
+[node name="PaintG" type="Button" parent="."]
+layout_mode = 2
+toggle_mode = true
+text = "G"
+flat = true
+
+[node name="PaintB" type="Button" parent="."]
+layout_mode = 2
+toggle_mode = true
+text = "B"
+flat = true
+
+[node name="PaintA" type="Button" parent="."]
+layout_mode = 2
+toggle_mode = true
+text = "A"
+flat = true
+
+[node name="VSeparator" type="VSeparator" parent="."]
+layout_mode = 2
+
+[node name="PaintSizeLabel" type="Label" parent="."]
+layout_mode = 2
+text = "Size
+"
+
+[node name="PaintSize" type="HSlider" parent="."]
+custom_minimum_size = Vector2(100, 30)
+layout_mode = 2
+min_value = 1.0
+value = 1.0
+
+[node name="PaintForceLabel" type="Label" parent="."]
+layout_mode = 2
+text = "Force"
+
+[node name="PaintForce" type="HSlider" parent="."]
+custom_minimum_size = Vector2(100, 30)
+layout_mode = 2
+min_value = 1.0
+value = 1.0

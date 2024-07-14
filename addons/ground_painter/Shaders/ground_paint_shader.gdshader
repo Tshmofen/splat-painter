@@ -7,7 +7,7 @@ uniform vec4 specular = vec4(0.5,0.5,0.5,0.5);
 uniform vec4 metallic = vec4(0,0,0,0);
 uniform vec4 normal_scale = vec4(1,1,1,1);
 
-uniform sampler2D texture_splatmap : filter_nearest_mipmap_anisotropic;
+uniform sampler2D texture_splatmap : filter_nearest;
 
 uniform sampler2D texture1_albedo_metallic : source_color,filter_nearest_mipmap,repeat_enable;
 uniform sampler2D texture1_normal_roughness : hint_roughness_normal,filter_nearest_mipmap,repeat_enable;

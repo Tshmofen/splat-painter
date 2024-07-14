@@ -1,9 +1,9 @@
 [gd_scene load_steps=2 format=3 uid="uid://btlhakehpnwu0"]
 
-[ext_resource type="ArrayMesh" uid="uid://nsnwkxwjxvla" path="res://TestAssets/Models/GroundExample/ground_example.res" id="1_vaifn"]
+[ext_resource type="ArrayMesh" uid="uid://8jxo8lgfpvsf" path="res://TestAssets/Models/ground_example.res" id="1_r7daa"]
 
 [node name="MainScene" type="Node3D"]
 
 [node name="GroundExample" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.98936, -6.2484)
-mesh = ExtResource("1_vaifn")
+mesh = ExtResource("1_r7daa")
