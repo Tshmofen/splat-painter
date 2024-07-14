@@ -40,8 +40,8 @@ public partial class SplatPaintPlugin : EditorPlugin
 
     private void AddCustomType(string type, string @base, string scriptPath, string iconPath = null)
     {
-        var script = ResourceLoader.Load<Script>($"{PluginPath}/{scriptPath}");
-        var icon = iconPath != null ? ResourceLoader.Load<Texture2D>($"{PluginPath}/Icons/{iconPath}") : null;
+        var script = LoadPluginResource<Script>(scriptPath);
+        var icon = iconPath != null ? LoadPluginResource<Texture2D>($"/Icons/{iconPath}") : null;
         AddCustomType(type, @base, script, icon);
     }
 
@@ -83,7 +83,7 @@ public partial class SplatPaintPlugin : EditorPlugin
 
     public override void _EnterTree()
     {
-        PaintControl = ResourceLoader.Load<PackedScene>(PluginPath + PaintControl.PluginNodePath).Instantiate<PaintControl>();
+        PaintControl = LoadPluginResource<PackedScene>(PaintControl.PluginNodePath).Instantiate<PaintControl>();
 
         Selection = EditorInterface.Singleton.GetSelection();
         Selection.SelectionChanged += OnSelectionChange;
@@ -135,8 +135,18 @@ public partial class SplatPaintPlugin : EditorPlugin
             return 0;
         }
 
-        SplatPaint.SelectorPaint(collisionPoint, collisionNormal, PaintControl.PaintMask, PaintControl.PaintForce);
+        SplatPaint.SelectorPaint(collisionPoint, collisionNormal, PaintControl.PaintMask, PaintControl.PaintForce, PaintControl.PaintSize);
         return 1; // break other controls when painting
+    }
+
+    public static TResource LoadPluginResource<TResource>(string relativePath) where TResource : class
+    {
+        return ResourceLoader.Load<TResource>(PluginPath + relativePath);
+    }
+
+    public static Image LoadPluginImage(string relativePath)
+    {
+        return Image.LoadFromFile(PluginPath + relativePath);
     }
 }
 

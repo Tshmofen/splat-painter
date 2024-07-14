@@ -3,25 +3,24 @@ using Godot;
 using GroundPainter.addons.splat_paint.UI;
 using GroundPainter.addons.splat_paint.Util;
 using Image = Godot.Image;
+using Vector4 = Godot.Vector4;
 
 namespace GroundPainter;
 
 [Tool]
 public partial class SplatPaint : MeshInstance3D
 {
-    public const string DefaultShaderPath = "/Shaders/ground_paint_shader.gdshader";
-    public const string SplatBaseDirectory = "res://Textures/Splats";
-    public const string PluginNodeAlias = nameof(SplatPaint);
     public const string PluginBaseAlias = nameof(MeshInstance3D);
-    public const string ScriptPath = $"{nameof(SplatPaint)}.cs";
+    public const string PluginNodeAlias = nameof(SplatPaint);
+    public const string ScriptPath = $"/{nameof(SplatPaint)}.cs";
+
+    public const string DefaultShaderPath = "/Shaders/ground_paint_shader.gdshader";
     public const string SplatMapParameter = "texture_splatmap";
-    public const int SplatSize = 1024;
+    public const int SplatSize = 512;
 
     private MeshUvTool _meshUvTool;
     private PaintSelector _paintSelector;
     private StaticBody3D _selectorCollision;
-
-    [Export(PropertyHint.SaveFile, "*.png")] public string SplatFileName { get; set; }
 
     #region Util
 
@@ -38,20 +37,10 @@ public partial class SplatPaint : MeshInstance3D
         return searchName;
     }
 
-    private static Image LoadOrCreateImage(string imagePath)
+    private static Image PrepareImage()
     {
-        Image image;
-
-        if (!FileAccess.FileExists(imagePath))
-        {
-            image = Image.Create(SplatSize, SplatSize, false, Image.Format.Rgba8);
-            image.SavePng(imagePath);
-        }
-        else
-        {
-            image = Image.LoadFromFile(imagePath);
-        }
-
+        var image = Image.Create(SplatSize, SplatSize, false, Image.Format.Rgba8);
+        image.Fill(new Color(1, 0, 0, 0));
         return image;
     }
 
@@ -71,26 +60,30 @@ public partial class SplatPaint : MeshInstance3D
         return shaderProperties.Any(a => a["name"].AsString() == SplatMapParameter);
     }
 
-    #endregion
-
-    public override void _Ready()
+    private static Color VectorToColor(Vector4 vector)
     {
-        if (!Engine.IsEditorHint())
-        {
-            return;
-        }
-
-        if (string.IsNullOrEmpty(SplatFileName))
-        {
-            if (!DirAccess.DirExistsAbsolute(SplatBaseDirectory))
-            {
-                DirAccess.MakeDirRecursiveAbsolute(SplatBaseDirectory);
-            }
-
-            var existingFiles = DirAccess.GetFilesAt(SplatBaseDirectory);
-            SplatFileName = $"{SplatBaseDirectory}/{GetUniqueName("splat", existingFiles)}.png";
-        }
+        return new Color(vector.X, vector.Y, vector.Z, vector.W);
     }
+
+    private static Vector4 ColorToVector(Color color)
+    {
+        return new Vector4(color.R, color.G, color.B, color.A);
+    }
+
+    private static Color BlendSplat(Color color, Vector4 paintMask, float factor)
+    {
+        var vectorColor = ColorToVector(color);
+        return VectorToColor(paintMask * factor + vectorColor * (1 - factor));
+    }
+
+    private static float GetBrushFactor(float brushCenter, int x, int y, float maxFactor)
+    {
+        // Vector distance formula + hardcoded adjustments
+        var adjustedFactor = 1 - ((x - brushCenter) * (x - brushCenter) + (y - brushCenter) * (y - brushCenter)) / (brushCenter * brushCenter / 2);
+        return Mathf.Clamp(adjustedFactor, 0, maxFactor);
+    }
+
+    #endregion
 
     public override void _EnterTree()
     {
@@ -99,7 +92,7 @@ public partial class SplatPaint : MeshInstance3D
             return;
         }
 
-        _paintSelector = ResourceLoader.Load<PackedScene>(SplatPaintPlugin.PluginPath + PaintSelector.PluginNodePath).Instantiate<PaintSelector>();
+        _paintSelector = SplatPaintPlugin.LoadPluginResource<PackedScene>(PaintSelector.PluginNodePath).Instantiate<PaintSelector>();
         AddChild(_paintSelector);
         _paintSelector.Visible = false;
     }
@@ -108,7 +101,7 @@ public partial class SplatPaint : MeshInstance3D
     {
         _meshUvTool = null;
         _paintSelector = null;
-        _selectorCollision = null;
+        _selectorCollision = null; 
     }
 
     public override string[] _GetConfigurationWarnings()
@@ -166,7 +159,7 @@ public partial class SplatPaint : MeshInstance3D
         _paintSelector.SetRadiusPower(radius);
     }
 
-    public void SelectorPaint(Vector3 globalPoint, Vector3 normal, Vector4 paintMask, float force)
+    public void SelectorPaint(Vector3 globalPoint, Vector3 normal, Vector4 paintMask, float paintForce, float paintSize)
     {
         if (Mesh == null || Mesh.GetSurfaceCount() == 0)
         {
@@ -177,12 +170,59 @@ public partial class SplatPaint : MeshInstance3D
         {
             Mesh.SurfaceSetMaterial(0, new ShaderMaterial
             {
-                Shader = ResourceLoader.Load<Shader>(SplatPaintPlugin.PluginPath + DefaultShaderPath)
+                Shader = SplatPaintPlugin.LoadPluginResource<Shader>(DefaultShaderPath)
             });
         }
 
+        var shaderMaterial = (ShaderMaterial)Mesh.SurfaceGetMaterial(0);
+        var splatTexture = shaderMaterial.GetShaderParameter(SplatMapParameter).As<ImageTexture>();
+
+        if (splatTexture == null)
+        {
+            splatTexture = ImageTexture.CreateFromImage(PrepareImage());
+            shaderMaterial.SetShaderParameter(SplatMapParameter, splatTexture);
+        }
+
         _meshUvTool ??= new MeshUvTool(this);
-        GD.Print(_meshUvTool.GetUvCoordinates(globalPoint, normal));
+
+        var uvPosition = _meshUvTool.GetUvCoordinates(globalPoint, normal);
+        if (uvPosition == null)
+        {
+            return;
+        }
+
+        var splatImage = splatTexture.GetImage();
+        var splatSize = splatTexture.GetSize();
+
+        paintSize *= 2.5f;
+        var destinationX = (int)(uvPosition.Value.X * splatSize.X - paintSize / 2f);
+        var destinationY = (int)(uvPosition.Value.Y * splatSize.Y - paintSize / 2f);
+
+        var brushImage = Image.Create((int)paintSize, (int)paintSize, false, Image.Format.Rgba8);
+        brushImage.Fill(VectorToColor(paintMask));
+        var maxFactor = Mathf.Ease(paintForce / 100, 2.5f);
+
+        // TODO: Supper ineffective, should be a viewport with shader
+        for (var x = 0; x < paintSize; x++)
+        {
+            for (var y = 0; y < paintSize; y++)
+            {
+                var finalX = destinationX + x;
+                var finalY = destinationY + y;
+
+                if ((finalY < 0 || finalY >= splatSize.Y) || (finalX < 0 || finalX >= splatSize.X))
+                {
+                    continue;
+                }
+
+                var factor = GetBrushFactor(paintSize / 2f, x, y, maxFactor);
+                var currentColor = splatImage.GetPixel(finalX, finalY);
+                var targetColor = BlendSplat(currentColor, paintMask, factor);
+                splatImage.SetPixel(finalX, finalY, targetColor);
+            }
+        }
+
+        splatTexture.SetImage(splatImage);
     }
 
     #endregion

@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c68y27ha5m6yp"
-path.s3tc="res://.godot/imported/beach_sand_color_displacement.png-69324a988a8c3de58741266b8ae40d80.s3tc.ctex"
+uid="uid://bhj0givev572c"
+path.s3tc="res://.godot/imported/forest_leafy_grass_color_displacement.png-616fbdca8994a82666eeb58d3e909612.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://TestAssets/Textures/Ground/beach_sand_color_displacement.png"
-dest_files=["res://.godot/imported/beach_sand_color_displacement.png-69324a988a8c3de58741266b8ae40d80.s3tc.ctex"]
+source_file="res://TestAssets/Textures/forest_leafy_grass_color_displacement.png"
+dest_files=["res://.godot/imported/forest_leafy_grass_color_displacement.png-616fbdca8994a82666eeb58d3e909612.s3tc.ctex"]
 
 [params]
 

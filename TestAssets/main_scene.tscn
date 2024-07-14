@@ -9,4 +9,3 @@
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.94482, 6.55433, -2.60721)
 mesh = ExtResource("1_r7daa")
 script = ExtResource("2_cag2y")
-SplatFileName = "res://Textures/Splats/splat.png"
