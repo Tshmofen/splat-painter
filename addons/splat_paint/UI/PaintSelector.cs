@@ -1,6 +1,6 @@
 ﻿using Godot;
 
-namespace GroundPainter.addons.splat_paint.UI;
+namespace GroundPainter.UI;
 
 [Tool]
 public partial class PaintSelector : MeshInstance3D

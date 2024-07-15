@@ -1,8 +1,7 @@
 ﻿using System.Linq;
 using Godot;
-using GroundPainter.addons.splat_paint.UI;
-using GroundPainter.addons.splat_paint.Util;
-using static System.Net.Mime.MediaTypeNames;
+using GroundPainter.UI;
+using GroundPainter.Util;
 using Image = Godot.Image;
 using Vector4 = Godot.Vector4;
 
@@ -106,12 +105,12 @@ public partial class SplatPaint : MeshInstance3D
         return splatTexture;
     }
 
-    private static void PaintSplatImage(Image image, Vector4 paintMask, float paintSize, float paintForce, int destinationX, int destinationY)
+    private static void BlendMaskToImage(Image image, Vector4 paintMask, float paintSize, float paintForce, int destinationX, int destinationY)
     {
-        var maxFactor = Mathf.Ease(paintForce / 100, 2.5f);
+        var maxFactor = Mathf.Ease(paintForce / 100, 2.5f); // 2.5f Is best for gentle low values
         var splatSize = image.GetSize();
 
-        // TODO: Supper ineffective, should be a viewport with shader, though is suitable for me at the moment
+        // TODO: Supper ineffective, should be a viewport with shader, though is fast enough for me at the moment
         for (var x = 0; x < paintSize; x++)
         {
             for (var y = 0; y < paintSize; y++)
@@ -187,7 +186,7 @@ public partial class SplatPaint : MeshInstance3D
         AddChild(_selectorCollision);
     }
 
-    public void SwitchSelector(bool show)
+    public void SwitchSelectorVisibility(bool show)
     {
         if (_paintSelector == null)
         {
@@ -229,9 +228,31 @@ public partial class SplatPaint : MeshInstance3D
         paintSize *= 2.5f; // Adjust to match visible brush
         var destinationX = (int)(uvPosition.Value.X * splatSize.X - paintSize / 2f);
         var destinationY = (int)(uvPosition.Value.Y * splatSize.Y - paintSize / 2f);
-        PaintSplatImage(splatImage, paintMask, paintSize, paintForce, destinationX, destinationY);
+        BlendMaskToImage(splatImage, paintMask, paintSize, paintForce, destinationX, destinationY);
 
         splatTexture.SetImage(splatImage);
+    }
+
+    public void SetSplatImage(Image image)
+    {
+        if (Mesh == null || Mesh.GetSurfaceCount() == 0)
+        {
+            return;
+        }
+
+        var splatTexture = GetSplatTexture();
+        splatTexture.SetImage(image);
+    }
+
+    public Image GetSplatImage()
+    {
+        if (Mesh == null || Mesh.GetSurfaceCount() == 0)
+        {
+            return null;
+        }
+
+        var splatTexture = GetSplatTexture();
+        return splatTexture.GetImage();
     }
 
     #endregion

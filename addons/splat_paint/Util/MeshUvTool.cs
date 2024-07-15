@@ -2,7 +2,7 @@
 using System.Linq;
 using Godot;
 
-namespace GroundPainter.addons.splat_paint.Util;
+namespace GroundPainter.Util;
 
 public class MeshUvTool
 {

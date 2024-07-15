@@ -11,6 +11,9 @@ public partial class SplatPaintPlugin : EditorPlugin
 {
     public const string PluginPath = "res://addons/splat_paint";
 
+    private Image _initialImage;
+    private bool _wasPaintingStore;
+
     public EditorSelection Selection { get; private set; }
     public PaintControl PaintControl { get; private set; }
     public SplatPaint SplatPaint { get; private set; }
@@ -23,7 +26,7 @@ public partial class SplatPaintPlugin : EditorPlugin
 
         if (selectedNode != SplatPaint)
         {
-            SplatPaint?.SwitchSelector(false);
+            SplatPaint?.SwitchSelectorVisibility(false);
         }
 
         if (selectedNode is not SplatPaint newSplatPaint)
@@ -79,6 +82,20 @@ public partial class SplatPaintPlugin : EditorPlugin
 
     }
 
+    private void CommitImageChange(SplatPaint paint, Image newImage, Image initialImage)
+    {
+        if (paint == null)
+        {
+            return;
+        }
+
+        var undoRedo = GetUndoRedo();
+        undoRedo.CreateAction($"SplatPaint '{paint.Name}' image have been updated.");
+        undoRedo.AddDoMethod(paint, SplatPaint.MethodName.SetSplatImage, newImage);
+        undoRedo.AddUndoMethod(paint, SplatPaint.MethodName.SetSplatImage, initialImage);
+        undoRedo.CommitAction(false); // No need to execute, image already set
+    }
+
     #endregion
 
     public override void _EnterTree()
@@ -106,28 +123,29 @@ public partial class SplatPaintPlugin : EditorPlugin
 
     public override int _Forward3DGuiInput(Camera3D camera, InputEvent @event)
     {
-        if (SplatPaint is null || PaintControl.PaintMask == Vector4.Zero)
-        {
-            return 0;
-        }
-
-        if (@event is not InputEventMouse mouseEvent)
-        {
-            return 0;
-        }
-
-        var cameraPoint = mouseEvent.Position;
         var toPaint = Input.IsMouseButtonPressed(MouseButton.Left);
-        var collision = GetCameraCollision(camera, cameraPoint, SplatPaint.GetWorld3D());
+        var wasPainting = _wasPaintingStore;
+        _wasPaintingStore = false;
 
+        if (!toPaint && wasPainting)
+        {
+            CommitImageChange(SplatPaint, SplatPaint.GetSplatImage(), _initialImage);
+        }
+
+        if (SplatPaint is null || PaintControl.PaintMask == Vector4.Zero || @event is not InputEventMouse mouseEvent)
+        {
+            return 0;
+        }
+
+        var collision = GetCameraCollision(camera, mouseEvent.Position, SplatPaint.GetWorld3D());
         if (collision == null)
         {
-            SplatPaint.SwitchSelector(false);
+            SplatPaint.SwitchSelectorVisibility(false);
             return 0;
         }
 
         var (collisionPoint, collisionNormal) = collision.Value;
-        SplatPaint.SwitchSelector(true);
+        SplatPaint.SwitchSelectorVisibility(true);
         SplatPaint.UpdateSelector(collisionPoint, PaintControl.PaintSize);
 
         if (!toPaint)
@@ -135,6 +153,12 @@ public partial class SplatPaintPlugin : EditorPlugin
             return 0;
         }
 
+        if (!wasPainting) // Save pre-change image for redo
+        {
+            _initialImage = SplatPaint.GetSplatImage();
+        }
+
+        _wasPaintingStore = true;
         SplatPaint.SelectorPaint(collisionPoint, collisionNormal, PaintControl.PaintMask, PaintControl.PaintForce, PaintControl.PaintSize);
         return 1; // break other controls when painting
     }
