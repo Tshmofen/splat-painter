@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="ground_painter"
+config/name="splat_painter"
 run/main_scene="res://TestAssets/main_scene.tscn"
 config/features=PackedStringArray("4.2", "C#", "Forward Plus")
 
@@ -22,7 +22,7 @@ gdscript/warnings/native_method_override=1
 
 [dotnet]
 
-project/assembly_name="ground_painter"
+project/assembly_name="splat_painter"
 
 [editor_plugins]
 

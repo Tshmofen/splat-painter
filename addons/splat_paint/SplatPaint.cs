@@ -1,11 +1,11 @@
-﻿using System.Linq;
+using System.Linq;
 using Godot;
-using GroundPainter.UI;
-using GroundPainter.Util;
+using SplatPainter.UI;
+using SplatPainter.Util;
 using Image = Godot.Image;
 using Vector4 = Godot.Vector4;
 
-namespace GroundPainter;
+namespace SplatPainter;
 
 [Tool]
 public partial class SplatPaint : MeshInstance3D

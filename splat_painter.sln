@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ground_painter", "ground_painter.csproj", "{790D467B-B3E1-4CA8-A637-D26D7E58E58C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "splat_painter", "splat_painter.csproj", "{790D467B-B3E1-4CA8-A637-D26D7E58E58C}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Debug", "Debug\Debug.vcxproj", "{FE9550E0-18B0-46E5-B1B1-D4ECCAB4F9A6}"
 EndProject

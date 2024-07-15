@@ -2,9 +2,9 @@
 
 using Godot;
 using System.Linq;
-using GroundPainter.UI;
+using SplatPainter.UI;
 
-namespace GroundPainter;
+namespace SplatPainter;
 
 [Tool]
 public partial class SplatPaintPlugin : EditorPlugin
