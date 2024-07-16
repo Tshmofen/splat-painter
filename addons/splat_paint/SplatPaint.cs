@@ -23,6 +23,7 @@ public partial class SplatPaint : MeshInstance3D
     private StaticBody3D _selectorCollision;
 
     private int _splatResolution = 512;
+
     [Export] public int SplatResolution
     {
         get => _splatResolution;
@@ -51,6 +52,20 @@ public partial class SplatPaint : MeshInstance3D
             var image = texture.GetImage();
             image.Resize(SplatResolution, SplatResolution);
             texture.SetImage(image);
+        }
+    }
+
+    private uint _editorCollisionLayer = 1 << 15;
+    [Export(PropertyHint.Layers3DPhysics)] public uint EditorCollisionLayer
+    {
+        get => _editorCollisionLayer;
+        set
+        {
+            _editorCollisionLayer = value;
+            if (_selectorCollision != null)
+            {
+                _selectorCollision.CollisionLayer = _editorCollisionLayer;
+            }
         }
     }
 
@@ -213,7 +228,7 @@ public partial class SplatPaint : MeshInstance3D
             return;
         }
 
-        _selectorCollision = new StaticBody3D();
+        _selectorCollision = new StaticBody3D { CollisionLayer = EditorCollisionLayer };
         _selectorCollision.AddChild(new CollisionShape3D { Shape = Mesh.CreateTrimeshShape() });
         AddChild(_selectorCollision);
     }

@@ -60,14 +60,15 @@ public partial class SplatPaintPlugin : EditorPlugin
         }
     }
 
-    private static (Vector3 point, Vector3 normal)? GetCameraCollision(Camera3D camera, Vector2 cameraPoint, World3D world)
+    private static (Vector3 point, Vector3 normal)? GetCameraCollision(Camera3D camera, Vector2 cameraPoint, World3D world, uint collisionMask)
     {
         var rayFrom = camera.ProjectRayOrigin(cameraPoint);
         var rayDir = camera.ProjectRayNormal(cameraPoint);
         var rayParams = new PhysicsRayQueryParameters3D
         {
             From = rayFrom,
-            To = rayFrom + (rayDir * 4096)
+            To = rayFrom + (rayDir * 4096),
+            CollisionMask = collisionMask
         };
 
         var result = world.DirectSpaceState.IntersectRay(rayParams);
@@ -137,7 +138,7 @@ public partial class SplatPaintPlugin : EditorPlugin
             return 0;
         }
 
-        var collision = GetCameraCollision(camera, mouseEvent.Position, SplatPaint.GetWorld3D());
+        var collision = GetCameraCollision(camera, mouseEvent.Position, SplatPaint.GetWorld3D(), SplatPaint.EditorCollisionLayer);
         if (collision == null)
         {
             SplatPaint.SwitchSelectorVisibility(false);
