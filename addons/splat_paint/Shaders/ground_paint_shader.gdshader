@@ -1,7 +1,6 @@
 shader_type spatial;
 render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_burley, specular_schlick_ggx;
 
-uniform vec4 albedo : source_color = vec4(1,1,1,1);
 uniform vec4 roughness = vec4(1,1,1,1);
 uniform vec4 specular = vec4(0.5,0.5,0.5,0.5);
 uniform vec4 metallic = vec4(0,0,0,0);
@@ -9,15 +8,19 @@ uniform vec4 normal_scale = vec4(1,1,1,1);
 
 uniform sampler2D texture_splatmap : filter_nearest;
 
+uniform vec4 albedo1 : source_color = vec4(1,1,1,1);
 uniform sampler2D texture1_albedo_metallic : source_color,filter_nearest_mipmap,repeat_enable;
 uniform sampler2D texture1_normal_roughness : hint_roughness_normal,filter_nearest_mipmap,repeat_enable;
 
+uniform vec4 albedo2 : source_color = vec4(1,1,1,1);
 uniform sampler2D texture2_albedo_metallic : source_color,filter_nearest_mipmap,repeat_enable;
 uniform sampler2D texture2_normal_roughness : hint_roughness_normal,filter_nearest_mipmap,repeat_enable;
 
+uniform vec4 albedo3 : source_color = vec4(1,1,1,1);
 uniform sampler2D texture3_albedo_metallic : source_color,filter_nearest_mipmap,repeat_enable;
 uniform sampler2D texture3_normal_roughness : hint_roughness_normal,filter_nearest_mipmap,repeat_enable;
 
+uniform vec4 albedo4 : source_color = vec4(1,1,1,1);
 uniform sampler2D texture4_albedo_metallic : source_color,filter_nearest_mipmap,repeat_enable;
 uniform sampler2D texture4_normal_roughness : hint_roughness_normal,filter_nearest_mipmap,repeat_enable;
 
@@ -48,35 +51,35 @@ void fragment() {
 	vec2 splat_uv = UV;
 	vec2 base_uv = UV * uv_scale.xy + uv_offset.xy;
 	
-	vec4 albedo1 = texture(texture1_albedo_metallic,base_uv);
-	vec4 normal1 = texture(texture1_normal_roughness,base_uv);
-	float roughness1 = albedo1.a * roughness.r;
-	float metallic1 = albedo1.a * metallic.r;
+	vec4 albedo1_tex = texture(texture1_albedo_metallic,base_uv);
+	vec4 normal1_tex = texture(texture1_normal_roughness,base_uv);
+	float roughness1 = albedo1_tex.a * roughness.r;
+	float metallic1 = albedo1_tex.a * metallic.r;
 	
-	vec4 albedo2 = texture(texture2_albedo_metallic,base_uv);
-	vec4 normal2 = texture(texture2_normal_roughness,base_uv);
-	float roughness2 = normal2.a * roughness.g;
-	float metallic2 = albedo2.a * metallic.g;
+	vec4 albedo2_tex = texture(texture2_albedo_metallic,base_uv);
+	vec4 normal2_tex = texture(texture2_normal_roughness,base_uv);
+	float roughness2 = normal2_tex.a * roughness.g;
+	float metallic2 = albedo2_tex.a * metallic.g;
 	
-	vec4 albedo3 = texture(texture3_albedo_metallic,base_uv);
-	vec4 normal3 = texture(texture3_normal_roughness,base_uv);
-	float roughness3 = normal3.a * roughness.b;
-	float metallic3 = albedo3.a * metallic.b;
+	vec4 albedo3_tex = texture(texture3_albedo_metallic,base_uv);
+	vec4 normal3_tex = texture(texture3_normal_roughness,base_uv);
+	float roughness3 = normal3_tex.a * roughness.b;
+	float metallic3 = albedo3_tex.a * metallic.b;
 	
-	vec4 albedo4 = texture(texture4_albedo_metallic,base_uv);
-	vec4 normal4 = texture(texture4_normal_roughness,base_uv);
-	float roughness4 = normal4.a * roughness.a;
-	float metallic4 = albedo4.a * metallic.a;
+	vec4 albedo4_tex = texture(texture4_albedo_metallic,base_uv);
+	vec4 normal4_tex = texture(texture4_normal_roughness,base_uv);
+	float roughness4 = normal4_tex.a * roughness.a;
+	float metallic4 = albedo4_tex.a * metallic.a;
 	
 	vec4 splat = normalize(texture(texture_splatmap,splat_uv));
-	vec4 weight = get_blended_weights(splat, vec4(albedo1.a,albedo2.a,albedo3.a,albedo4.a));
+	vec4 weight = get_blended_weights(splat, vec4(albedo1_tex.a,albedo2_tex.a,albedo3_tex.a,albedo4_tex.a));
 	float weight_sum = (weight.r + weight.g + weight.b + weight.a);
 	
-	ALBEDO = albedo.rgb * (
-		weight.r * albedo1.rgb +
-		weight.g * albedo2.rgb +
-		weight.b * albedo3.rgb + 
-		weight.a * albedo4.rgb
+	ALBEDO = (
+		weight.r * albedo1_tex.rgb * albedo1.rgb +
+		weight.g * albedo2_tex.rgb * albedo2.rgb +
+		weight.b * albedo3_tex.rgb * albedo3.rgb + 
+		weight.a * albedo4_tex.rgb * albedo4.rgb
 	) / weight_sum;
 	
 	ROUGHNESS = (
@@ -94,10 +97,10 @@ void fragment() {
 	) / weight_sum;
 	
 	NORMAL_MAP = (
-		weight.r * normal1.rgb +
-		weight.g * normal2.rgb +
-		weight.b * normal3.rgb + 
-		weight.a * normal4.rgb
+		weight.r * normal1_tex.rgb +
+		weight.g * normal2_tex.rgb +
+		weight.b * normal3_tex.rgb + 
+		weight.a * normal4_tex.rgb
 	) / weight_sum;
 	
 	NORMAL_MAP_DEPTH = (
