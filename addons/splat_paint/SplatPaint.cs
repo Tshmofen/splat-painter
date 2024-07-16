@@ -22,6 +22,38 @@ public partial class SplatPaint : MeshInstance3D
     private PaintSelector _paintSelector;
     private StaticBody3D _selectorCollision;
 
+    private int _splatResolution = 512;
+    [Export] public int SplatResolution
+    {
+        get => _splatResolution;
+        set
+        {
+            _splatResolution = value;
+
+            if (_splatResolution < 32)
+            {
+                _splatResolution = 32;
+            }
+
+            if (Mesh == null || Mesh.GetSurfaceCount() == 0)
+            {
+                return;
+            }
+
+            var texture = GetSplatTexture();
+            var imageSize = texture.GetSize();
+
+            if ((int)imageSize.X == SplatResolution && (int)imageSize.Y == SplatResolution)
+            {
+                return;
+            }
+
+            var image = texture.GetImage();
+            image.Resize(SplatResolution, SplatResolution);
+            texture.SetImage(image);
+        }
+    }
+
     #region Util
 
     private static string GetUniqueName(string name, string[] existingNames)
@@ -225,7 +257,7 @@ public partial class SplatPaint : MeshInstance3D
         var splatImage = splatTexture.GetImage();
         var splatSize = splatImage.GetSize();
 
-        paintSize *= 2.5f; // Adjust to match visible brush
+        paintSize *= SplatResolution / 200f; // Adjust to match visible brush
         var destinationX = (int)(uvPosition.Value.X * splatSize.X - paintSize / 2f);
         var destinationY = (int)(uvPosition.Value.Y * splatSize.Y - paintSize / 2f);
         BlendMaskToImage(splatImage, paintMask, paintSize, paintForce, destinationX, destinationY);
