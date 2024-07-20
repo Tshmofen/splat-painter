@@ -9,6 +9,7 @@ Simple tool to paint splat texture directly on the Mesh surface in Godot editor.
 - Ground depth blending depending on the `Metallic` channel of each texture.
 - Simple tool for painting each single channel (`RGBA`) with `Size` and `Force` settings.
 - Includes simple `MeshUvTool` that can be used to map `GlobalPoint` & `Normal` to `UV` position on the `ArrayMesh`.
+- Quick input actions for editor: `R` -> Red Channel, `G` -> Green, `B` -> Blue, `A` -> Alpha, `C` -> Clean Channels.
 - Support for `UndoRedo`.
 
 ## Context
