@@ -1,4 +1,5 @@
-﻿using Godot;
+﻿using System;
+using Godot;
 
 namespace SplatPainter.UI;
 
@@ -11,6 +12,7 @@ public partial class PaintControl : HBoxContainer
     [Export] private BaseButton PaintG { get; set; }
     [Export] private BaseButton PaintB { get; set; }
     [Export] private BaseButton PaintA { get; set; }
+    [Export] private BaseButton Reset { get; set; }
     [Export] private Slider PaintForceSlider { get; set; }
     [Export] private Slider PaintSizeSlider { get; set; }
     [Export] private Label PaintForceLabel { get; set; }
@@ -19,6 +21,8 @@ public partial class PaintControl : HBoxContainer
     public Vector4 PaintMask { get; private set; } = new(0, 0, 0, 0);
     public float PaintForce { get; private set; } = 30;
     public float PaintSize { get; private set; } = 10;
+
+    public event Action ResetCalled;
 
     #region Util
 
@@ -56,6 +60,7 @@ public partial class PaintControl : HBoxContainer
         PaintG.Pressed += () => UpdatePaintMask(new Vector4(0, 1, 0, 0));
         PaintB.Pressed += () => UpdatePaintMask(new Vector4(0, 0, 1, 0));
         PaintA.Pressed += () => UpdatePaintMask(new Vector4(0, 0, 0, 1));
+        Reset.Pressed += () => ResetCalled?.Invoke();
         UpdatePaintMask(new Vector4(1, 0, 0, 0));
 
         PaintForceSlider.ValueChanged += UpdatePaintForce;

@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://addons/splat_paint/UI/PaintControl.cs" id="1_kgti1"]
 
-[node name="RiverControl" type="HBoxContainer" node_paths=PackedStringArray("PaintR", "PaintG", "PaintB", "PaintA", "PaintForceSlider", "PaintSizeSlider", "PaintForceLabel", "PaintSizeLabel")]
+[node name="RiverControl" type="HBoxContainer" node_paths=PackedStringArray("PaintR", "PaintG", "PaintB", "PaintA", "Reset", "PaintForceSlider", "PaintSizeSlider", "PaintForceLabel", "PaintSizeLabel")]
 offset_right = 128.0
 offset_bottom = 26.0
 script = ExtResource("1_kgti1")
@@ -10,6 +10,7 @@ PaintR = NodePath("PaintR")
 PaintG = NodePath("PaintG")
 PaintB = NodePath("PaintB")
 PaintA = NodePath("PaintA")
+Reset = NodePath("Reset")
 PaintForceSlider = NodePath("PaintForce")
 PaintSizeSlider = NodePath("PaintSize")
 PaintForceLabel = NodePath("PaintForceLabel")
@@ -46,24 +47,31 @@ layout_mode = 2
 [node name="PaintSizeLabel" type="Label" parent="."]
 custom_minimum_size = Vector2(75, 0)
 layout_mode = 2
-text = "Size (1)
-"
+text = "Size (10)"
 horizontal_alignment = 1
 
 [node name="PaintSize" type="HSlider" parent="."]
 custom_minimum_size = Vector2(100, 30)
 layout_mode = 2
 min_value = 1.0
-value = 1.0
+value = 10.0
 
 [node name="PaintForceLabel" type="Label" parent="."]
 custom_minimum_size = Vector2(88, 0)
 layout_mode = 2
-text = "Force (1)"
+text = "Force (30)"
 horizontal_alignment = 1
 
 [node name="PaintForce" type="HSlider" parent="."]
 custom_minimum_size = Vector2(100, 30)
 layout_mode = 2
 min_value = 1.0
-value = 1.0
+value = 30.0
+
+[node name="VSeparator2" type="VSeparator" parent="."]
+layout_mode = 2
+
+[node name="Reset" type="Button" parent="."]
+layout_mode = 2
+text = "Reset Editor"
+flat = true

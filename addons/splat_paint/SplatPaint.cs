@@ -272,10 +272,10 @@ public partial class SplatPaint : MeshInstance3D
         var splatImage = splatTexture.GetImage();
         var splatSize = splatImage.GetSize();
 
-        paintSize *= SplatResolution / 200f; // Adjust to match visible brush
-        var destinationX = (int)(uvPosition.Value.X * splatSize.X - paintSize / 2f);
-        var destinationY = (int)(uvPosition.Value.Y * splatSize.Y - paintSize / 2f);
-        BlendMaskToImage(splatImage, paintMask, paintSize, paintForce, destinationX, destinationY);
+        var brushSize = paintSize * SplatResolution / Mesh.GetAabb().GetLongestAxisSize() / 1.8f; // Const to adjust for visible brush
+        var destinationX = (int)(uvPosition.Value.X * splatSize.X - brushSize / 2f);
+        var destinationY = (int)(uvPosition.Value.Y * splatSize.Y - brushSize / 2f);
+        BlendMaskToImage(splatImage, paintMask, brushSize, paintForce, destinationX, destinationY);
 
         splatTexture.SetImage(splatImage);
     }
@@ -300,6 +300,19 @@ public partial class SplatPaint : MeshInstance3D
 
         var splatTexture = GetSplatTexture();
         return splatTexture.GetImage();
+    }
+
+    public void ResetEditor()
+    {
+        _meshUvTool = null;
+        _selectorCollision?.QueueFree();
+        _selectorCollision = null;
+        InitSelectorCollision();
+    }
+
+    public ulong? GetColliderId()
+    {
+        return _selectorCollision?.GetInstanceId();
     }
 
     #endregion

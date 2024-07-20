@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Godot;
 
@@ -99,7 +100,19 @@ public class MeshUvTool
 
     public MeshUvTool(MeshInstance3D meshInstance)
     {
-        var mesh = (ArrayMesh) meshInstance.Mesh;
+        var mesh = meshInstance.Mesh as ArrayMesh;
+
+        if (mesh == null && meshInstance.Mesh is PrimitiveMesh primitive)
+        {
+            mesh = new ArrayMesh();
+            mesh.AddSurfaceFromArrays(Mesh.PrimitiveType.Triangles, primitive.GetMeshArrays());
+        }
+
+        if (mesh == null)
+        {
+            throw new ArgumentOutOfRangeException(nameof(meshInstance.Mesh), "Provided mesh doesn't support array access or is not a primitive.");
+        }
+
         _meshTool = new MeshDataTool();
         _meshTool.CreateFromSurface(mesh, 0);
         _faceCount = _meshTool.GetFaceCount();

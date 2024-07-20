@@ -52,15 +52,17 @@ public partial class SplatPaintPlugin : EditorPlugin
     {
         if (show && !PaintControl.IsInsideTree())
         {
+            PaintControl.ResetCalled += ResetSplatPaint;
             AddControlToContainer(CustomControlContainer.SpatialEditorMenu, PaintControl);
         }
         else if (!show && PaintControl.IsInsideTree())
         {
+            PaintControl.ResetCalled -= ResetSplatPaint;
             RemoveControlFromContainer(CustomControlContainer.SpatialEditorMenu, PaintControl);
         }
     }
 
-    private static (Vector3 point, Vector3 normal)? GetCameraCollision(Camera3D camera, Vector2 cameraPoint, World3D world, uint collisionMask)
+    private static (Vector3 point, Vector3 normal)? GetCameraCollision(Camera3D camera, Vector2 cameraPoint, SplatPaint splatPaint)
     {
         var rayFrom = camera.ProjectRayOrigin(cameraPoint);
         var rayDir = camera.ProjectRayNormal(cameraPoint);
@@ -68,11 +70,17 @@ public partial class SplatPaintPlugin : EditorPlugin
         {
             From = rayFrom,
             To = rayFrom + (rayDir * 4096),
-            CollisionMask = collisionMask
+            CollisionMask = splatPaint.EditorCollisionLayer
         };
 
-        var result = world.DirectSpaceState.IntersectRay(rayParams);
+        var result = splatPaint.GetWorld3D().DirectSpaceState.IntersectRay(rayParams);
         if (result == null || result.Count == 0)
+        {
+            return null;
+        }
+
+        var colliderId = result["collider_id"].AsUInt64();
+        if (colliderId != splatPaint.GetColliderId())
         {
             return null;
         }
@@ -138,7 +146,7 @@ public partial class SplatPaintPlugin : EditorPlugin
             return 0;
         }
 
-        var collision = GetCameraCollision(camera, mouseEvent.Position, SplatPaint.GetWorld3D(), SplatPaint.EditorCollisionLayer);
+        var collision = GetCameraCollision(camera, mouseEvent.Position, SplatPaint);
         if (collision == null)
         {
             SplatPaint.SwitchSelectorVisibility(false);
@@ -162,6 +170,11 @@ public partial class SplatPaintPlugin : EditorPlugin
         _wasPaintingStore = true;
         SplatPaint.SelectorPaint(collisionPoint, collisionNormal, PaintControl.PaintMask, PaintControl.PaintForce, PaintControl.PaintSize);
         return 1; // break other controls when painting
+    }
+
+    public void ResetSplatPaint()
+    {
+        SplatPaint?.ResetEditor();
     }
 
     public static TResource LoadPluginResource<TResource>(string relativePath) where TResource : class
