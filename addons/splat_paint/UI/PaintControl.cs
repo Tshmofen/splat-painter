@@ -26,20 +26,6 @@ public partial class PaintControl : HBoxContainer
 
     #region Util
 
-    private void UpdatePaintMask(Vector4 paintMask)
-    {
-        if (PaintMask == paintMask)
-        {
-            paintMask = Vector4.Zero;;
-        }
-
-        PaintR.ButtonPressed = paintMask.X != 0;
-        PaintG.ButtonPressed = paintMask.Y != 0;
-        PaintB.ButtonPressed = paintMask.Z != 0;
-        PaintA.ButtonPressed = paintMask.W != 0;
-        PaintMask = paintMask;
-    }
-
     private void UpdatePaintForce(double value)
     {
         PaintForce = (float) value;
@@ -68,5 +54,19 @@ public partial class PaintControl : HBoxContainer
 
         PaintSizeSlider.ValueChanged += UpdatePaintSize;
         PaintSizeSlider.Value = PaintSize;
+    }
+
+    public void UpdatePaintMask(Vector4 paintMask)
+    {
+        if (PaintMask == paintMask)
+        {
+            paintMask = Vector4.Zero;
+        }
+
+        PaintR.ButtonPressed = paintMask.X != 0;
+        PaintG.ButtonPressed = paintMask.Y != 0;
+        PaintB.ButtonPressed = paintMask.Z != 0;
+        PaintA.ButtonPressed = paintMask.W != 0;
+        PaintMask = paintMask;
     }
 }

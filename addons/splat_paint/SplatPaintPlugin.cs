@@ -141,6 +141,27 @@ public partial class SplatPaintPlugin : EditorPlugin
             CommitImageChange(SplatPaint, SplatPaint.GetSplatImage(), _initialImage);
         }
 
+        // Input to painting mask
+        if (@event is InputEventKey { Pressed: true, Echo: false } keyEvent)
+        {
+            Vector4? paintMask = keyEvent.Keycode switch
+            {
+                Key.R => new Vector4(1, 0, 0, 0),
+                Key.G => new Vector4(0, 1, 0, 0),
+                Key.B => new Vector4(0, 0, 1, 0),
+                Key.A => new Vector4(0, 0, 0, 1),
+                Key.C => new Vector4(0, 0, 0, 0),
+                _ => null
+            };
+
+            if (paintMask != null)
+            {
+                PaintControl.UpdatePaintMask(paintMask.Value);
+            }
+
+            return 1;
+        }
+
         if (SplatPaint is null || PaintControl.PaintMask == Vector4.Zero || @event is not InputEventMouse mouseEvent)
         {
             return 0;
