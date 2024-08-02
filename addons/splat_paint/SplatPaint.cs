@@ -14,6 +14,7 @@ public partial class SplatPaint : MeshInstance3D
     public const string PluginNodeAlias = nameof(SplatPaint);
     public const string ScriptPath = $"/{nameof(SplatPaint)}.cs";
 
+    public const string SplatPaintStamp = "SplatPaint";
     public const string DefaultShaderPath = "/Shaders/ground_paint_shader.gdshader";
     public const string SplatMapParameter = "texture_splatmap";
     public const int SplatSize = 512;
@@ -230,6 +231,7 @@ public partial class SplatPaint : MeshInstance3D
 
         _selectorCollision = new StaticBody3D { CollisionLayer = EditorCollisionLayer };
         _selectorCollision.AddChild(new CollisionShape3D { Shape = Mesh.CreateTrimeshShape() });
+        _selectorCollision.SetMeta(SplatPaintStamp, true);
         AddChild(_selectorCollision);
     }
 
@@ -312,6 +314,14 @@ public partial class SplatPaint : MeshInstance3D
 
     public Node GetCollider()
     {
+        foreach (var node in GetChildren())
+        {
+            if (node is StaticBody3D collider && collider != _selectorCollision && collider.HasMeta("SplatPaint"))
+            {
+                collider.QueueFree();
+            }
+        }
+
         return _selectorCollision;
     }
 
