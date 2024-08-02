@@ -310,9 +310,9 @@ public partial class SplatPaint : MeshInstance3D
         InitSelectorCollision();
     }
 
-    public ulong? GetColliderId()
+    public Node GetCollider()
     {
-        return _selectorCollision?.GetInstanceId();
+        return _selectorCollision;
     }
 
     #endregion

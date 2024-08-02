@@ -79,8 +79,8 @@ public partial class SplatPaintPlugin : EditorPlugin
             return null;
         }
 
-        var colliderId = result["collider_id"].AsUInt64();
-        if (colliderId != splatPaint.GetColliderId())
+        var collider = result["collider"].As<Node>();
+        if (collider != splatPaint.GetCollider())
         {
             return null;
         }
