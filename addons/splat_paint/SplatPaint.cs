@@ -183,6 +183,8 @@ public partial class SplatPaint : MeshInstance3D
 
     public override void _EnterTree()
     {
+        _paintSelector = (PaintSelector) GetChildren().FirstOrDefault(c => c is PaintSelector);
+
         if (_paintSelector != null)
         {
             return;
