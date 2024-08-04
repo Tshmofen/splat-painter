@@ -142,7 +142,8 @@ public partial class SplatPaintPlugin : EditorPlugin
         }
 
         // Input to painting mask
-        if (@event is InputEventKey { Pressed: true, Echo: false } keyEvent)
+        var isEditorAction = Input.IsKeyPressed(Key.Ctrl) || Input.IsMouseButtonPressed(MouseButton.Right);
+        if (@event is InputEventKey { Pressed: true, Echo: false } keyEvent && !isEditorAction)
         {
             Vector4? paintMask = keyEvent.Keycode switch
             {
